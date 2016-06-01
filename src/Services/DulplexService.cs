@@ -8,15 +8,21 @@ using System.Text;
 
 namespace CP.WcfDemo.Services
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
     public class DulplexService : IDulplexService
     {
+        private static int _index = 0;
+
+        public DulplexService()
+        {
+            Console.WriteLine("DulplexService {0} created!", ++_index);
+        }
         public void Add(double x, double y)
         {
+            Publisher.Instance.NotifyMessage(string.Format("Server - method Add({0},{1}) get called.", x, y));
             double result = x + y;
             ICallback callback = OperationContext.Current.GetCallbackChannel<ICallback>();
             callback.DisplayResult(result);
-            Publisher.Instance.NotifyMessage(string.Format("Server - method Add({0},{1}) get called.", x, y));
         }
 
         public void Subscribe()

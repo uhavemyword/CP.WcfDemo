@@ -8,9 +8,16 @@ using CP.WcfDemo.Contracts;
 
 namespace CP.WcfDemo.Services
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
     public class SimpleService : ISimpleService
     {
+        private static int _index = 0;
+
+        public SimpleService()
+        {
+            Console.WriteLine("SimpleService {0} created!", ++_index);
+        }
+
         public string GetData(int value)
         {
             return string.Format("Server - You entered: {0}", value);
